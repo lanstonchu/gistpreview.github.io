@@ -70,6 +70,22 @@
     // 5. write data
     var content = info.files[fileName].content;
     document.write(content);
+    
+    //load links
+    var links = document.querySelectorAll("link");
+    for (let [key, value] of Object.entries(info.files)) {
+      for (var i = 0; i < links.length; i++) {
+        var href = links[i].getAttribute("href").replace(/^\/|\/$/g, '');
+        if (value.filename === href && value.type === "text/css") {
+          console.log("load file " + value.filename);
+          var style = document.createElement('style');
+          style.type = 'text/css';
+          style.innerHTML = value.content;
+          document.getElementsByTagName('head')[0].appendChild(style);
+        }
+      }
+    }
+    
   })
   .catch(function (err) {
     showMainPage();
